@@ -1,7 +1,7 @@
 const WHATSAPP_NUMBER = "50686548537";
 
 // ✅ URL pública de tu sitio (GitHub Pages)
-const PUBLIC_BASE_URL = "https://stuarthmiranda.github.io/strom";
+const PUBLIC_BASE_URL = "https://strom5005.github.io/strom/"; // con slash al final
 
 const productsGrid = document.getElementById("productsGrid");
 const resultCount = document.getElementById("resultCount");
@@ -29,12 +29,20 @@ function formatCRC(n) {
   return "₡" + Number(n || 0).toLocaleString("es-CR");
 }
 
+function normalizePath(path) {
+  // convierte "\" a "/" y quita slashes iniciales
+  return String(path || "").replace(/\\/g, "/").replace(/^\/+/, "");
+}
+
+function buildPublicUrl(path) {
+  // arma URL absoluta a tu GitHub Pages
+  return `${PUBLIC_BASE_URL}${normalizePath(path)}`;
+}
+
 function buildWhatsAppLink(p) {
   // ✅ Link público a la imagen para que WhatsApp haga mini-preview
-  // p.imagen normalmente viene como "images/archivo.png"
-  const imageUrl = `${PUBLIC_BASE_URL}/${String(p.imagen || "").replace(/^\/+/, "")}`;
+  const imageUrl = buildPublicUrl(p.imagen);
 
-  // ✅ Mejor: el link en una línea SOLO, sin texto pegado encima
   const txt = [
     "Hola 👋",
     "Me interesa esta colonia:",
@@ -56,7 +64,10 @@ function openModal(p) {
   modalMeta.textContent = `${p.genero} • ${p.tipo}`;
   modalDesc.textContent = p.descripcion || "Sin descripción.";
   modalPrice.textContent = formatCRC(p.precio);
-  modalImg.src = p.imagen || "";
+
+  // ✅ imagen absoluta para que siempre cargue bien
+  modalImg.src = buildPublicUrl(p.imagen);
+
   modalWhatsApp.href = buildWhatsAppLink(p);
 
   // tu CSS usa .active
@@ -90,8 +101,11 @@ function render(list) {
     const card = document.createElement("div");
     card.className = "card";
 
+    // ✅ en el grid puede ser relativo o absoluto; lo dejo absoluto para evitar fallos
+    const imgSrc = buildPublicUrl(p.imagen);
+
     card.innerHTML = `
-      <img src="${p.imagen}" alt="${p.nombre}">
+      <img src="${imgSrc}" alt="${p.nombre}">
       <h3>${p.nombre}</h3>
       <p class="precio">${formatCRC(p.precio)}</p>
       <button type="button" class="btn primary btn-card">Información</button>
@@ -137,7 +151,8 @@ clearFilters.addEventListener("click", (e) => {
 
 async function loadProducts() {
   try {
-    const res = await fetch("catalogo.json");
+    // ✅ si catalogo.json queda en el root, esto está perfecto
+    const res = await fetch("catalogo.json", { cache: "no-store" });
     const data = await res.json();
 
     products = (Array.isArray(data) ? data : []).map((p) => ({
@@ -148,7 +163,7 @@ async function loadProducts() {
       tipo: (p.tipo ?? "").toString(),
       descripcion: (p.descripcion ?? "").toString(),
       precio: Number(p.precio || 0),
-      imagen: (p.imagen ?? "").toString().replace(/\\/g, "/")
+      imagen: normalizePath(p.imagen ?? "")
     }));
 
     applyFilters();
