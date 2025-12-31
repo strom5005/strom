@@ -1,0 +1,12 @@
+[
+    {
+        "id_perfume": "2",
+        "nombre": "Le Male",
+        "marca": "Jean PG",
+        "genero": "hombre",
+        "tipo": "amaderados",
+        "descripcion": "Colonia juvenil, especialmente para las noches, consulte sin compromiso",
+        "precio": "40000",
+        "imagen": "images\/perfume_1767173007_3d5d1747.png"
+    }
+]

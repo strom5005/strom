@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>STRØM - Tienda de Colonias</title>
+  <link rel="stylesheet" href="style_home.css" />
+</head>
+
+<body>
+
+<header class="header">
+  <h1 class="logo">STRØM</h1>
+
+  <nav class="nav">
+    <a href="#inicio">Inicio</a>
+    <a href="#catalogo">Catálogo</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+</header>
+
+<section id="inicio" class="banner">
+  <div class="banner-content">
+    <h2>Fragancias Exclusivas</h2>
+    <p>Catálogo rápido para consultar disponibilidad por WhatsApp.</p>
+
+    <div class="banner-actions">
+      <a class="btn primary" href="#catalogo">Ver catálogo</a>
+      <a class="btn ghost" target="_blank"
+         href="https://wa.me/50686548537?text=Hola%2C%20quiero%20consultar%20por%20colonias%20en%20STR%C3%98M">
+        Consultar por WhatsApp
+      </a>
+    </div>
+
+    <div class="mini-info">
+      <span>📍 Costa Rica</span>
+      <span>🚚 Entrega rápida</span>
+      <span>💳 SINPE / Efectivo</span>
+    </div>
+  </div>
+</section>
+
+<section id="catalogo" class="contenedorProductos">
+  <div class="seccion-head">
+    <h2 class="tituloSeccion">Catálogo</h2>
+    <p class="subtituloSeccion">Filtrá por precio, sexo y tipo de perfume.</p>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="filtros">
+    <div class="filtro">
+      <label>Precio mínimo (₡)</label>
+      <input id="minPrice" type="number" min="0" step="500" placeholder="Ej: 15000">
+    </div>
+
+    <div class="filtro">
+      <label>Precio máximo (₡)</label>
+      <input id="maxPrice" type="number" min="0" step="500" placeholder="Ej: 40000">
+    </div>
+
+    <div class="filtro">
+      <label>Sexo</label>
+      <select id="sexFilter">
+        <option value="all">Todos</option>
+        <option value="hombre">Hombre</option>
+        <option value="mujer">Mujer</option>
+        <option value="unisex">Unisex</option>
+      </select>
+    </div>
+
+    <div class="filtro">
+      <label>Tipo</label>
+      <select id="typeFilter">
+        <option value="all">Todos</option>
+        <option value="citricos">Cítricos</option>
+        <option value="amaderados">Amaderados</option>
+        <option value="dulces">Dulces</option>
+        <option value="orientales">Orientales</option>
+        <option value="aromaticos">Aromáticos</option>
+        <option value="acuaticos">Acuáticos</option>
+      </select>
+    </div>
+
+    <div class="filtro acciones">
+      <button id="clearFilters" class="btn small ghost">Limpiar</button>
+    </div>
+  </div>
+
+  <div class="result-info">
+    <span id="resultCount">0</span> productos
+  </div>
+
+  <!-- GRID -->
+  <div id="productsGrid" class="gridProductos"></div>
+</section>
+
+<section id="contacto" class="seccion">
+  <div class="seccion-head">
+    <h2 class="tituloSeccion">Contacto</h2>
+    <p class="subtituloSeccion">Consultá disponibilidad y precios actualizados.</p>
+  </div>
+
+  <div class="contact-cards">
+    <a class="contact-card" target="_blank"
+       href="https://wa.me/50686548537?text=Hola%2C%20quiero%20consultar%20disponibilidad%20en%20STR%C3%98M">
+      <strong>WhatsApp</strong>
+      <span>Escribime para disponibilidad</span>
+    </a>
+
+    <a class="contact-card" target="_blank" href="https://instagram.com/stuarthmiranda">
+      <strong>Instagram</strong>
+      <span>Ver novedades y promos</span>
+    </a>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>© <span id="year"></span> STRØM — Tienda en linea</p>
+</footer>
+
+<!-- MODAL -->
+<div id="modalOverlay" class="modal-overlay" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button id="closeModal" class="modal-close" aria-label="Cerrar">✕</button>
+
+    <div class="modal-grid">
+      <img id="modalImg" class="modal-img" alt="Imagen del perfume">
+      <div class="modal-content">
+        <h3 id="modalTitle"></h3>
+        <p id="modalMeta" class="modal-meta"></p>
+        <p id="modalDesc" class="modal-desc"></p>
+        <p id="modalPrice" class="modal-price"></p>
+
+        <a id="modalWhatsApp" class="btn primary" target="_blank" href="#">
+          Preguntar por WhatsApp
+        </a>
+
+        <p class="modal-note">
+          *Disponibilidad sujeta a stock.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+<script src="app.js"></script>
+
+</body>
+</html>
