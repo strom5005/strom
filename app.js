@@ -41,7 +41,7 @@ function buildPublicUrl(path) {
 
 function buildWhatsAppLink(p) {
   // ✅ Link público a la imagen para que WhatsApp haga mini-preview
-  const imageUrl = buildPublicUrl(p.imagen);
+  //const imageUrl = buildPublicUrl(p.imagen);
 
   const txt = [
     "Hola 👋",
