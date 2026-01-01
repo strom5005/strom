@@ -40,8 +40,9 @@ function buildPublicUrl(path) {
 }
 
 function buildWhatsAppLink(p) {
-  // ✅ Link público a la imagen para que WhatsApp haga mini-preview
-  //const imageUrl = buildPublicUrl(p.imagen);
+  // ✅ En vez de link directo a la imagen (muestra nombre del archivo),
+  // mandamos link al sitio con el id. WhatsApp previsualiza la página.
+  const pageUrl = `${PUBLIC_BASE_URL}?id=${encodeURIComponent(p.id_perfume)}`;
 
   const txt = [
     "Hola 👋",
@@ -51,13 +52,14 @@ function buildWhatsAppLink(p) {
     `🏷️ ${p.marca}`,
     `💰 ${formatCRC(p.precio)}`,
     "",
-    imageUrl,
+    pageUrl,
     "",
     "¿Está disponible?"
   ].join("\n");
 
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(txt)}`;
 }
+
 
 function openModal(p) {
   modalTitle.textContent = `${p.nombre} — ${p.marca}`;
