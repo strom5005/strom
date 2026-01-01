@@ -1,5 +1,15 @@
 [
     {
+        "id_perfume": "3",
+        "nombre": "Nautica Voyage",
+        "marca": "Nautica",
+        "genero": "hombre",
+        "tipo": "acuaticos",
+        "descripcion": "Colonia clásica de Nautica, perfecta para cualquier situación y a un precio accesible",
+        "precio": "8500",
+        "imagen": "images\/perfume_1767233328_7e4d3916.png"
+    },
+    {
         "id_perfume": "2",
         "nombre": "Le Male",
         "marca": "Jean PG",

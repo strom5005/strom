@@ -12,7 +12,7 @@ const sexFilter = document.getElementById("sexFilter");
 const typeFilter = document.getElementById("typeFilter");
 const clearFilters = document.getElementById("clearFilters");
 
-// Modal IDs
+// ===== MODAL PRODUCTOS IDs =====
 const modalOverlay = document.getElementById("modalOverlay");
 const closeModal = document.getElementById("closeModal");
 const modalImg = document.getElementById("modalImg");
@@ -21,6 +21,11 @@ const modalMeta = document.getElementById("modalMeta");
 const modalDesc = document.getElementById("modalDesc");
 const modalPrice = document.getElementById("modalPrice");
 const modalWhatsApp = document.getElementById("modalWhatsApp");
+
+// ===== MODAL CONTACTO IDs =====
+const openContactBtn = document.getElementById("openContact");
+const contactModalOverlay = document.getElementById("contactModalOverlay");
+const closeContactModal = document.getElementById("closeContactModal");
 
 let products = [];
 let filtered = [];
@@ -45,9 +50,9 @@ function buildWhatsAppLink(p) {
 
   const txt = [
     "Hola 👋",
-    "Me interesa esta colonia:",
+    "Me interesa este perfume:",
     "",
-    ` ${p.nombre}`,
+    `💨 ${p.nombre}`,
     `🏷️ ${p.marca}`,
     `💰 ${formatCRC(p.precio)}`,
     "",
@@ -59,6 +64,7 @@ function buildWhatsAppLink(p) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(txt)}`;
 }
 
+// ===== MODAL PRODUCTOS =====
 function openModal(p) {
   modalTitle.textContent = `${p.nombre} — ${p.marca}`;
   modalMeta.textContent = `${p.genero} • ${p.tipo}`;
@@ -70,24 +76,72 @@ function openModal(p) {
 
   modalWhatsApp.href = buildWhatsAppLink(p);
 
-  // tu CSS usa .active
   modalOverlay.classList.add("active");
   modalOverlay.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
 }
 
 function closeModalFn() {
   modalOverlay.classList.remove("active");
   modalOverlay.setAttribute("aria-hidden", "true");
+
+  // solo devolvé scroll si el otro modal NO está abierto
+  if (!contactModalOverlay || !contactModalOverlay.classList.contains("active")) {
+    document.body.style.overflow = "";
+  }
 }
 
 closeModal.addEventListener("click", closeModalFn);
+
 modalOverlay.addEventListener("click", (e) => {
   if (e.target === modalOverlay) closeModalFn();
 });
+
+// ===== MODAL CONTACTO =====
+function openContactModalFn() {
+  if (!contactModalOverlay) return;
+  contactModalOverlay.classList.add("active");
+  contactModalOverlay.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+}
+
+function closeContactModalFn() {
+  if (!contactModalOverlay) return;
+  contactModalOverlay.classList.remove("active");
+  contactModalOverlay.setAttribute("aria-hidden", "true");
+
+  // solo devolvé scroll si el modal de productos NO está abierto
+  if (!modalOverlay.classList.contains("active")) {
+    document.body.style.overflow = "";
+  }
+}
+
+if (openContactBtn) {
+  openContactBtn.addEventListener("click", (e) => {
+    e.preventDefault(); // evita bajar a #contacto
+    openContactModalFn();
+  });
+}
+
+if (closeContactModal) {
+  closeContactModal.addEventListener("click", closeContactModalFn);
+}
+
+if (contactModalOverlay) {
+  contactModalOverlay.addEventListener("click", (e) => {
+    if (e.target === contactModalOverlay) closeContactModalFn();
+  });
+}
+
+// ===== ESC (cierra el que esté abierto) =====
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") closeModalFn();
+  if (e.key !== "Escape") return;
+
+  if (modalOverlay.classList.contains("active")) closeModalFn();
+  if (contactModalOverlay && contactModalOverlay.classList.contains("active")) closeContactModalFn();
 });
 
+// ===== RENDER =====
 function render(list) {
   productsGrid.innerHTML = "";
   resultCount.textContent = list.length;
@@ -101,7 +155,6 @@ function render(list) {
     const card = document.createElement("div");
     card.className = "card";
 
-    // ✅ en el grid puede ser relativo o absoluto; lo dejo absoluto para evitar fallos
     const imgSrc = buildPublicUrl(p.imagen);
 
     card.innerHTML = `
@@ -116,6 +169,7 @@ function render(list) {
   });
 }
 
+// ===== FILTERS =====
 function applyFilters() {
   const min = Number(minPrice.value || 0);
   const max = Number(maxPrice.value || 0);
@@ -149,9 +203,9 @@ clearFilters.addEventListener("click", (e) => {
 [minPrice, maxPrice].forEach((el) => el.addEventListener("input", applyFilters));
 [sexFilter, typeFilter].forEach((el) => el.addEventListener("change", applyFilters));
 
+// ===== LOAD PRODUCTS =====
 async function loadProducts() {
   try {
-    // ✅ si catalogo.json queda en el root, esto está perfecto
     const res = await fetch("catalogo.json", { cache: "no-store" });
     const data = await res.json();
 
